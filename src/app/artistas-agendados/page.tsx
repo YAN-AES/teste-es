@@ -1,119 +1,42 @@
 "use client"
 
-import type React from "react"
-
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import Link from "next/link"
+import ArtistCard from "@/components/artist-card"
 
-export default function ContrataArtista({ params }: { params: { artistId: string } }) {
-  const router = useRouter()
-  const [artist, setArtist] = useState({ id: "", name: "" })
-  const [formData, setFormData] = useState({
-    nome: "",
-    artista: "",
-    cache: "",
-    data: "",
-    endereco: "",
-  })
+export default function ArtistasAgendados() {
+  const [contratacoes, setContratacoes] = useState([])
 
   useEffect(() => {
-    // Simular busca do artista por ID
-    const mockArtist = { id: params.artistId, name: `Artista ${params.artistId}` }
-    setArtist(mockArtist)
-    setFormData((prev) => ({ ...prev, artista: mockArtist.name }))
-  }, [params.artistId])
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Salvar no localStorage
-    const contratacoes = JSON.parse(localStorage.getItem("contratacoes") || "[]")
-    contratacoes.push(formData)
-    localStorage.setItem("contratacoes", JSON.stringify(contratacoes))
-    router.push("/sucesso")
-  }
+    const storedContratacoes = JSON.parse(localStorage.getItem("contratacoes") || "[]")
+    setContratacoes(storedContratacoes)
+  }, [])
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Contratar {artist.name}</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="nome" className="block mb-1">
-            Nome*
-          </label>
-          <input
-            type="text"
-            id="nome"
-            name="nome"
-            value={formData.nome}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded"
-          />
+      <h1 className="text-3xl font-bold mb-6">Artistas Agendados</h1>
+      {contratacoes.length === 0 ? (
+        <p>Nenhum artista agendado ainda.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {contratacoes.map((contratacao, index) => (
+            <ArtistCard
+              key={index}
+              artist={{
+                id: index,
+                name: contratacao.artista,
+                imageUrl: "/placeholder.svg",
+                tags: [`Data: ${contratacao.data}`, `Cachê: R$ ${contratacao.cache}`],
+              }}
+              href={`/contrato/${index}`}
+              actionText="Ver Detalhes"
+            />
+          ))}
         </div>
-        <div>
-          <label htmlFor="artista" className="block mb-1">
-            Artista Selecionado*
-          </label>
-          <input
-            type="text"
-            id="artista"
-            name="artista"
-            value={formData.artista}
-            onChange={handleChange}
-            required
-            readOnly
-            className="w-full p-2 border border-gray-300 rounded bg-gray-100"
-          />
-        </div>
-        <div>
-          <label htmlFor="cache" className="block mb-1">
-            Cachê
-          </label>
-          <input
-            type="number"
-            id="cache"
-            name="cache"
-            value={formData.cache}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div>
-          <label htmlFor="data" className="block mb-1">
-            Data do evento*
-          </label>
-          <input
-            type="date"
-            id="data"
-            name="data"
-            value={formData.data}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div>
-          <label htmlFor="endereco" className="block mb-1">
-            Endereço
-          </label>
-          <input
-            type="text"
-            id="endereco"
-            name="endereco"
-            value={formData.endereco}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-          Contratar
-        </button>
-      </form>
+      )}
+      <Link href="/" className="mt-6 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+        Voltar para Início
+      </Link>
     </div>
   )
 }
