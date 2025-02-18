@@ -24,6 +24,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { ptBR } from "date-fns/locale";
 
 const formSchema = z.object({
   contratante: z.string().min(2, {
@@ -103,12 +104,12 @@ export default function AddressForm() {
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-[240px] pl-3 text-left font-normal",
+                          "w-full pl-3 text-left font-normal",
                           !field.value && "text-muted-foreground"
                         )}
                       >
                         {field.value ? (
-                          format(field.value, "PPP")
+                          format(field.value, "PPP", { locale: ptBR })
                         ) : (
                           <span>Selecione uma data</span>
                         )}
