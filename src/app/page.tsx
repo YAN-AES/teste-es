@@ -6,6 +6,8 @@ import { useState } from "react";
 import ArtistCard from "@/components/artist-card";
 import Link from "next/link";
 
+import AssignForm from "@/components/assign-form";
+
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -62,7 +64,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="font-roboto">
+    <div className="font-roboto flex flex-col items-center w-full justify-center">
       <h1 className="text-3xl font-bold font-roboto mb-6">
         Contratação de Artistas
       </h1>
@@ -110,6 +112,7 @@ export default function Home() {
           Artistas Agendados
         </Link>
       </div>
+      <AssignForm />
     </div>
   );
 }

@@ -24,9 +24,9 @@ export default function ArtistCard({ artist }: ArtistCardProps) {
             objectFit="cover"
           />
         </div>
-        <div className="p-4 flex flex-col items-center">
+        <div className="py-3 px-1 flex flex-col items-center justify-center">
           <h3 className="text-2xl font-semibold mb-2">{artist.name}</h3>
-          <div>
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-3">
             <div className="flex flex-wrap gap-2 mb-3">
               {artist.tags.map((tag, index) => (
                 <span
