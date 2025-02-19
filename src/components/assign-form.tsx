@@ -1,6 +1,4 @@
-"use client";
-
-// Imports
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -54,6 +52,9 @@ const formSchema = z.object({
 });
 
 export default function AddressForm() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [cepError, setCepError] = useState("");
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -66,6 +67,63 @@ export default function AddressForm() {
       estado: "",
     },
   });
+
+  const fetchAddressData = async (cep: string) => {
+    setIsLoading(true);
+    setCepError("");
+
+    const cleanCep = cep.replace(/\D/g, "");
+
+    if (cleanCep.length !== 8) {
+      setCepError("CEP deve conter 8 dígitos");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://viacep.com.br/ws/${cleanCep}/json/`
+      );
+
+      if (!response.ok) {
+        setCepError("Erro ao buscar CEP");
+        setIsLoading(false);
+        return;
+      }
+
+      const data = await response.json();
+
+      if (data.erro) {
+        setCepError("CEP não encontrado");
+        setIsLoading(false);
+        return;
+      }
+
+      form.setValue("rua", data.logradouro);
+      form.setValue("bairro", data.bairro);
+      form.setValue("cidade", data.localidade);
+      form.setValue("estado", data.uf);
+    } catch (error) {
+      setCepError("Erro ao buscar endereço");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    let formattedCep = value.replace(/\D/g, "");
+    if (formattedCep.length >= 5) {
+      formattedCep = formattedCep.replace(/^(\d{5})(\d)/, "$1-$2");
+    }
+
+    form.setValue("cep", formattedCep);
+
+    if (formattedCep.replace(/\D/g, "").length === 8) {
+      fetchAddressData(formattedCep);
+    }
+  };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
@@ -142,8 +200,16 @@ export default function AddressForm() {
                     CEP
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="12345-678" {...field} />
+                    <Input
+                      placeholder="12345-678"
+                      {...field}
+                      onChange={handleCepChange}
+                      disabled={isLoading}
+                    />
                   </FormControl>
+                  {cepError && (
+                    <span className="text-red-500 text-sm">{cepError}</span>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -173,7 +239,11 @@ export default function AddressForm() {
               <FormItem>
                 <FormLabel className="font-roboto font-semibold">Rua</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nome da rua" {...field} />
+                  <Input
+                    placeholder="Nome da rua"
+                    {...field}
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -189,7 +259,11 @@ export default function AddressForm() {
                   Bairro
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="Nome do bairro" {...field} />
+                  <Input
+                    placeholder="Nome do bairro"
+                    {...field}
+                    disabled={isLoading}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -206,7 +280,11 @@ export default function AddressForm() {
                     Cidade
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="Nome da cidade" {...field} />
+                    <Input
+                      placeholder="Nome da cidade"
+                      {...field}
+                      disabled={isLoading}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -222,7 +300,12 @@ export default function AddressForm() {
                     Estado
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="SP" {...field} maxLength={2} />
+                    <Input
+                      placeholder="SP"
+                      {...field}
+                      maxLength={2}
+                      disabled={isLoading}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -230,7 +313,7 @@ export default function AddressForm() {
             />
           </div>
 
-          <Button type="submit" variant="rosebutton2">
+          <Button type="submit" variant="rosebutton2" disabled={isLoading}>
             Enviar
           </Button>
         </div>
