@@ -17,7 +17,7 @@ export default function ArtistasAgendados() {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col gap-5">
       <h1 className="text-3xl font-bold mb-6">Artistas Agendados</h1>
       {contratacoes.length === 0 ? (
         <p>Nenhum artista agendado ainda.</p>

@@ -1,29 +1,14 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
+import { SearchComponent } from "@/components/search-component";
 import ArtistCard from "@/components/artist-card";
 import Link from "next/link";
-
 import AssignForm from "@/components/assign-form";
 
 export default function Home() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Simular uma chamada de API com dados mockados
-    const mockResults = featuredArtists.filter(
-      (artist) =>
-        artist.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        artist.tags.some((tag) =>
-          tag.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-    );
-    setSearchResults(mockResults);
-  };
 
   const featuredArtists = [
     {
@@ -63,29 +48,28 @@ export default function Home() {
     },
   ];
 
+  const handleSearch = (searchTerm: string) => {
+    const mockResults = featuredArtists.filter(
+      (artist) =>
+        artist.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        artist.tags.some((tag) =>
+          tag.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+    );
+    setSearchResults(mockResults);
+  };
+
   return (
-    <div className="font-roboto flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold font-roboto mb-6">
+    <div className="font-roboto flex flex-col items-center justify-center min-h-screen">
+      
+      <SearchComponent onSearch={handleSearch} />
+      
+      <h1 className="text-3xl font-bold font-roboto mb-6 mt-16">
         Contratação de Artistas
       </h1>
-      <form onSubmit={handleSearch} className="mb-8">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Buscar artistas ou gêneros..."
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-        <button
-          type="submit"
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Buscar
-        </button>
-      </form>
 
       {searchResults.length > 0 ? (
-        <div>
+        <div className="w-full max-w-7xl px-4">
           <h2 className="text-2xl font-bold mb-4">Resultados da Pesquisa</h2>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             {searchResults.map((artist) => (
@@ -94,14 +78,14 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <>
+        <div className="w-full max-w-7xl px-4">
           <h2 className="text-2xl font-bold mb-4">Artistas em Destaque</h2>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
             {featuredArtists.map((artist) => (
               <ArtistCard key={artist.id} artist={artist} />
             ))}
           </div>
-        </>
+        </div>
       )}
 
       <div className="mt-8 flex items-center justify-center">
@@ -112,6 +96,7 @@ export default function Home() {
           Artistas Agendados
         </Link>
       </div>
+      
       <AssignForm />
     </div>
   );
