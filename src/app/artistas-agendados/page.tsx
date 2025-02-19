@@ -1,16 +1,20 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import ArtistCard from "@/components/artist-card"
+// Imports
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import ArtistCard from "@/components/artist-card";
+import { Button } from "@/components/ui/button";
 
 export default function ArtistasAgendados() {
-  const [contratacoes, setContratacoes] = useState([])
+  const [contratacoes, setContratacoes] = useState([]);
 
   useEffect(() => {
-    const storedContratacoes = JSON.parse(localStorage.getItem("contratacoes") || "[]")
-    setContratacoes(storedContratacoes)
-  }, [])
+    const storedContratacoes = JSON.parse(
+      localStorage.getItem("contratacoes") || "[]"
+    );
+    setContratacoes(storedContratacoes);
+  }, []);
 
   return (
     <div>
@@ -26,7 +30,10 @@ export default function ArtistasAgendados() {
                 id: index,
                 name: contratacao.artista,
                 imageUrl: "/placeholder.svg",
-                tags: [`Data: ${contratacao.data}`, `Cachê: R$ ${contratacao.cache}`],
+                tags: [
+                  `Data: ${contratacao.data}`,
+                  `Cachê: R$ ${contratacao.cache}`,
+                ],
               }}
               href={`/contrato/${index}`}
               actionText="Ver Detalhes"
@@ -34,10 +41,9 @@ export default function ArtistasAgendados() {
           ))}
         </div>
       )}
-      <Link href="/" className="mt-6 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-        Voltar para Início
+      <Link href="/">
+        <Button variant="rosebutton">Voltar para Início</Button>
       </Link>
     </div>
-  )
+  );
 }
-
