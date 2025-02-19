@@ -2,11 +2,9 @@
 // Libraries imports
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 // Components imports
 import ArtistCard from "@/components/artist-card";
-import AssignForm from "@/app/contratar/[artistId]/_components/assign-form";
 import { QuerySearchInput } from "@/components/search-component";
 
 // Actions imports
@@ -65,8 +63,6 @@ export default async function Home(props: Props) {
           Artistas Agendados
         </Link>
       </div>
-
-      <AssignForm />
     </div>
   );
 }

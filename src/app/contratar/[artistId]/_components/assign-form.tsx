@@ -2,7 +2,6 @@
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { ptBR } from "date-fns/locale";
@@ -27,37 +26,10 @@ import {
 
 // Local imports
 import { cn } from "@/lib/utils";
+import { assignSchema, type Assign } from "@/schemas/assign";
 
 // Actions imports
 import { SaveAssign } from "@/actions/save-assign";
-
-const formSchema = z.object({
-  artistId: z.string().min(1),
-  contratante: z.string().min(2, {
-    message: "Nome do contratante deve ter pelo menos 2 caracteres.",
-  }),
-  dataEvento: z.date({
-    required_error: "A data do evento é obrigatória.",
-  }),
-  cep: z.string().regex(/^\d{5}-?\d{3}$/, {
-    message: "CEP inválido. Use o formato: 12345-678",
-  }),
-  numero: z.string().min(1, {
-    message: "Número é obrigatório.",
-  }),
-  rua: z.string().min(2, {
-    message: "Rua deve ter pelo menos 2 caracteres.",
-  }),
-  bairro: z.string().min(2, {
-    message: "Bairro deve ter pelo menos 2 caracteres.",
-  }),
-  cidade: z.string().min(2, {
-    message: "Cidade deve ter pelo menos 2 caracteres.",
-  }),
-  estado: z.string().length(2, {
-    message: "Use a sigla do estado com 2 caracteres.",
-  }),
-});
 
 type AssignFormProps = {
   artistId: string;
@@ -67,8 +39,8 @@ export function AssignForm(props: AssignFormProps) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [cepError, setCepError] = React.useState("");
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<Assign>({
+    resolver: zodResolver(assignSchema),
     defaultValues: {
       artistId: props.artistId,
       contratante: "",
@@ -139,7 +111,7 @@ export function AssignForm(props: AssignFormProps) {
     }
   };
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: Assign) {
     console.log(values);
 
     const response = await SaveAssign(values);
