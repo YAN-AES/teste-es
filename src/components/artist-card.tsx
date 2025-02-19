@@ -11,12 +11,14 @@ export default function ArtistCard({ artist }: ArtistCardProps) {
   return (
     <Link href={`/contratar/${artist.id}`}>
       <div className="flex flex-col justify-start items-center font-roboto border- border-rose-700 w-56 h-[370px] rounded-lg overflow-hidden hover:shadow-lg shadow-rose-700/50 transition-shadow duration-300">
-        <div className="relative h-56 w-56 rounded-lg overflow-hidden">
+        <div className="relative size-56 rounded-lg overflow-hidden">
           <Image
             src={artist.images?.[0]?.url || "/placeholder.svg"}
             alt={artist.name}
-            layout="fill"
-            objectFit="cover"
+            width={256}
+            height={256}
+            className="size-full object-fill"
+            priority
           />
         </div>
         <div className="py-3 px-1 flex flex-col items-center justify-center">

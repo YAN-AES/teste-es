@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { formatDate } from "../../../utils/dateUtils"
+import { formatDate } from "@/utils/dateUtils"
 
 export default function ContratoDetalhes({ params }: { params: { id: string } }) {
   const [contrato, setContrato] = useState(null)

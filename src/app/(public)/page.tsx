@@ -33,7 +33,7 @@ export default async function Home(props: Props) {
         <h2 className="text-2xl font-bold pb-4">Artistas pesquisados</h2>
         <div className="flex flex-row w-full gap-2">
           {
-            searchedArtists.items.map((artist) => (
+            searchedArtists.items?.map((artist) => (
               <ArtistCard key={artist.id} artist={artist} />
             ))
           }

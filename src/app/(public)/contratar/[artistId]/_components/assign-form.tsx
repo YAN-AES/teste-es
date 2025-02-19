@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { ptBR } from "date-fns/locale";
+import { useRouter } from "next/navigation";
 
 // Components imports
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,9 @@ import { assignSchema, type Assign } from "@/schemas/assign";
 // Actions imports
 import { SaveAssign } from "@/actions/save-assign";
 
+// Hooks imports
+import { useToast } from "@/hooks/use-toast"
+
 type AssignFormProps = {
   artistId: string;
 }
@@ -38,6 +42,9 @@ type AssignFormProps = {
 export function AssignForm(props: AssignFormProps) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [cepError, setCepError] = React.useState("");
+
+  const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<Assign>({
     resolver: zodResolver(assignSchema),
@@ -112,11 +119,14 @@ export function AssignForm(props: AssignFormProps) {
   };
 
   async function onSubmit(values: Assign) {
-    console.log(values);
+    await SaveAssign(values);
 
-    const response = await SaveAssign(values);
+    toast({
+      title: "Contratação realizada com sucesso",
+      description: "Em breve"
+    });
 
-    console.log(response);
+    router.replace("/");
   }
 
   return (
@@ -231,8 +241,8 @@ export function AssignForm(props: AssignFormProps) {
                 <FormControl>
                   <Input
                     placeholder="Nome da rua"
+                    disabled
                     {...field}
-                    disabled={isLoading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -251,8 +261,8 @@ export function AssignForm(props: AssignFormProps) {
                 <FormControl>
                   <Input
                     placeholder="Nome do bairro"
+                    disabled
                     {...field}
-                    disabled={isLoading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -272,8 +282,8 @@ export function AssignForm(props: AssignFormProps) {
                   <FormControl>
                     <Input
                       placeholder="Nome da cidade"
+                      disabled
                       {...field}
-                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
@@ -292,9 +302,9 @@ export function AssignForm(props: AssignFormProps) {
                   <FormControl>
                     <Input
                       placeholder="SP"
-                      {...field}
                       maxLength={2}
-                      disabled={isLoading}
+                      disabled
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
