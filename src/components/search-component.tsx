@@ -1,113 +1,70 @@
 "use client";
+// Libraries imports
+import { useCallback, useState, useEffect, Suspense } from "react";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { MagnifyingGlass } from "@phosphor-icons/react";
 
-// Imports
-import * as React from "react";
-import { Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
+// Component imports
 import { Input } from "@/components/ui/input";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
 
-interface SearchComponentProps {
-  onSearch: (term: string) => void;
+// Hooks imports
+import { useDebounce } from "@/hooks/use-debounce";
+
+type InputProps = {
+  searchable: string;
+  id?: string;
+};
+
+export function QuerySearchInput(props: InputProps) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchInput {...props} />
+    </Suspense>
+  );
 }
 
-export function SearchComponent({ onSearch }: SearchComponentProps) {
-  const [searchTerm, setSearchTerm] = React.useState("");
+export function SearchInput(props: InputProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [isDesktop, setIsDesktop] = React.useState(true);
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const debouncedSearch = useDebounce(search, 500);
 
-  React.useEffect(() => {
-    const checkWidth = () => {
-      setIsDesktop(window.innerWidth >= 768);
-    };
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
 
-    checkWidth();
+      return params.toString();
+    },
+    [searchParams]
+  );
 
-    window.addEventListener("resize", checkWidth);
+  function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearch(e.target.value);
+  }
 
-    return () => window.removeEventListener("resize", checkWidth);
-  }, []);
+  //* Update the URL with the new search query
+  useEffect(() => {
+    const trimmedSearch = debouncedSearch.trim();
+    if (debouncedSearch)
+      router.push(`${pathname}?${createQueryString("search", trimmedSearch)}`);
+    else router.push(`${pathname}?${createQueryString("search", "")}`);
+  }, [debouncedSearch, createQueryString, pathname, router]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSearch(searchTerm);
-  };
-
-  const SearchForm = () => (
-    <form onSubmit={handleSubmit} className="space-y-4 pt-4">
-      <div className="flex flex-col space-y-4">
-        <Input
-          type="text"
-          placeholder="Buscar artistas ou gêneros..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full"
-        />
-        <Button type="submit" className="w-full">
-          Buscar
-        </Button>
+  return (
+    <div className="flex flex-row relative w-full max-w-[512px]">
+      <div className="absolute -translate-y-1/2 left-4 top-1/2">
+        <MagnifyingGlass className="size-4" />
       </div>
-    </form>
+      <Input
+        id={props.id}
+        placeholder={`Pesquisar por ${props.searchable}...`}
+        className="w-full pl-12"
+        value={search}
+        onChange={handleSearch}
+      />
+    </div>
   );
-
-  // Desktop
-  const DesktopSearch = () => (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="fixed top-4 left-4 h-10 w-10"
-        >
-          <Search className="h-5 w-5" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="left">
-        <SheetHeader>
-          <SheetTitle>Buscar</SheetTitle>
-        </SheetHeader>
-        <SearchForm />
-      </SheetContent>
-    </Sheet>
-  );
-
-  // Mobile
-  const MobileSearch = () => (
-    <Drawer>
-      <DrawerTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="fixed top-4 left-4 h-10 w-10"
-        >
-          <Search className="h-5 w-5" />
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
-            <DrawerTitle>Buscar</DrawerTitle>
-          </DrawerHeader>
-          <div className="p-4">
-            <SearchForm />
-          </div>
-        </div>
-      </DrawerContent>
-    </Drawer>
-  );
-
-  return isDesktop ? <DesktopSearch /> : <MobileSearch />;
 }

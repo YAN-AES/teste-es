@@ -1,14 +1,13 @@
 import { SpotifyApi } from '@spotify/web-api-ts-sdk';
 
-const clientId = process.env.SPOTIFY_CLIENT_ID as string;
-const clientSecret = process.env.SPOTIFY_SECRET_ID as string;
+import { env } from "@/env";
 
 // Choose one of the following:
-const sdk = SpotifyApi.withClientCredentials(clientId, clientSecret);
+const sdk = SpotifyApi.withClientCredentials(env.SPOTIFY_CLIENT_ID, env.SPOTIFY_SECRET_ID);
 
 
-export async function GET (request: Request) {
-    const playlist = await sdk.playlists.getPlaylistItems('4gJGkR1ISXTIF42k9hKwbD',"BR",undefined, 10)
+export async function GET() {
+    const playlist = await sdk.playlists.getPlaylistItems('4gJGkR1ISXTIF42k9hKwbD', "BR", undefined, 10)
 
-    return new Response(JSON.stringify(playlist))
+    return playlist;
 }

@@ -1,92 +1,61 @@
-"use client";
-
-import type React from "react";
-import { useState } from "react";
-import { SearchComponent } from "@/components/search-component";
-import ArtistCard from "@/components/artist-card";
+"use server";
+// Libraries imports
+import React from "react";
 import Link from "next/link";
-import AssignForm from "@/components/assign-form";
+import Image from "next/image";
 
-export default function Home() {
-  const [searchResults, setSearchResults] = useState([]);
+// Components imports
+import ArtistCard from "@/components/artist-card";
+import AssignForm from "@/app/contratar/[artistId]/_components/assign-form";
+import { QuerySearchInput } from "@/components/search-component";
 
-  const featuredArtists = [
-    {
-      id: 1,
-      name: "Banda Rock Star",
-      imageUrl:
-        "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-      tags: ["Rock", "Alternativo", "Anos 90"],
-    },
-    {
-      id: 2,
-      name: "DJ Eletrônico",
-      imageUrl:
-        "https://images.unsplash.com/photo-1516873240891-4bf014598ab4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-      tags: ["Eletrônica", "House", "Techno"],
-    },
-    {
-      id: 3,
-      name: "Tyler, The Creator",
-      imageUrl:
-        "https://images.unsplash.com/photo-1516873240891-4bf014598ab4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-      tags: ["Pop", "R&B", "Dance"],
-    },
-    {
-      id: 4,
-      name: "SZA",
-      imageUrl:
-        "https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-      tags: ["Rock", "Indie", "Alternativo"],
-    },
-    {
-      id: 5,
-      name: "Kendrick Lamar",
-      imageUrl:
-        "https://images.unsplash.com/photo-1516873240891-4bf014598ab4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-      tags: ["Hip-Hop", "Rap", "Underground"],
-    },
-  ];
+// Actions imports
+import { getPlaylist } from "@/actions/get-playlist";
+import { searchArtists } from "@/actions/search-artists";
 
-  const handleSearch = (searchTerm: string) => {
-    const mockResults = featuredArtists.filter(
-      (artist) =>
-        artist.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        artist.tags.some((tag) =>
-          tag.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-    );
-    setSearchResults(mockResults);
-  };
+type Props = {
+  searchParams: Promise<{
+    search: string;
+  }>;
+};
+
+export default async function Home(props: Props) {
+  const { searchParams } = props;
+  const { search } = await searchParams;
+
+  const searchedArtists = await searchArtists({ search, limit: 3 });
+  const playlist1 = await getPlaylist({ playlistId: "4gJGkR1ISXTIF42k9hKwbD" });
 
   return (
     <div className="font-roboto flex flex-col items-center justify-center min-h-screen">
-      
-      <SearchComponent onSearch={handleSearch} />
-      
-      <h1 className="text-3xl font-bold font-roboto mb-6 mt-16">
+
+      <QuerySearchInput searchable="artistas" />
+
+      <div className="w-full max-w-7xl px-4">
+        <h2 className="text-2xl font-bold pb-4">Artistas pesquisados</h2>
+        <div className="flex flex-row w-full gap-2">
+          {
+            searchedArtists.items.map((artist) => (
+              <ArtistCard key={artist.id} artist={artist} />
+            ))
+          }
+        </div>
+      </div>
+
+      <h1 className="text-3xl font-bold font-roboto pb-6 pt-16">
         Contratação de Artistas
       </h1>
 
-      {searchResults.length > 0 ? (
-        <div className="w-full max-w-7xl px-4">
-          <h2 className="text-2xl font-bold mb-4">Resultados da Pesquisa</h2>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-            {searchResults.map((artist) => (
+      <div className="w-full max-w-7xl px-4">
+        <h2 className="text-2xl font-bold pb-4">Artistas em Destaque</h2>
+        <div className="grid grid-cols-1 pd:grid-cols-5 gap-6 pb-8">
+          {
+            playlist1.artists.map((artist) => (
               <ArtistCard key={artist.id} artist={artist} />
-            ))}
-          </div>
+            ))
+          }
         </div>
-      ) : (
-        <div className="w-full max-w-7xl px-4">
-          <h2 className="text-2xl font-bold mb-4">Artistas em Destaque</h2>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-            {featuredArtists.map((artist) => (
-              <ArtistCard key={artist.id} artist={artist} />
-            ))}
-          </div>
-        </div>
-      )}
+      </div>
 
       <div className="mt-8 flex items-center justify-center">
         <Link
@@ -96,7 +65,7 @@ export default function Home() {
           Artistas Agendados
         </Link>
       </div>
-      
+
       <AssignForm />
     </div>
   );
