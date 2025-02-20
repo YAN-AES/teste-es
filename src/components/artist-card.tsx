@@ -15,8 +15,8 @@ export default function ArtistCard(props: ArtistCardProps) {
   const href = props.href || `/contratar/${props.artist.id}`;
 
   return (
-    <Link href={href}>
-      <div className="flex flex-col justify-start items-center font-roboto border w-56 h-[370px] rounded-lg overflow-hidden hover:shadow-lg shadow-rose-700/50 transition-shadow duration-300">
+    <Link href={href} className="group">
+      <div className="flex flex-col justify-start items-center font-roboto border w-56 h-[370px] rounded-lg overflow-hidden hover:shadow-lg group-hover:bg-rose-300 transition-all ease-in-out duration-200">
         <div className="relative size-56 rounded-lg overflow-hidden">
           <Image
             src={props.artist.images?.[0]?.url || "/placeholder.svg"}
@@ -27,20 +27,22 @@ export default function ArtistCard(props: ArtistCardProps) {
             priority
           />
         </div>
-        <div className="py-3 px-1 flex flex-col items-center justify-center">
-          <h3 className="text-2xl font-semibold mb-2">{props.artist.name}</h3>
+        <div className="py-3 px-1 flex flex-col items-center justify-center w-full transition-all">
+          <h3 className="text-2xl font-semibold mb-2 group-hover:text-white">{props.artist.name}</h3>
           <div className="flex flex-wrap items-center justify-center gap-2 mb-3">
-            <div className="flex flex-wrap gap-2 mb-3">
-              {props.artist.genres.map((genre, index) => (
-                <span
-                  key={`tag-${props.artist.id}-${index}`}
-                  className="bg-rose-100 text-rose-800 text-xs font-semibold px-2.5 py-0.5 rounded"
-                >
-                  {genre}
-                </span>
-              ))}
+            <div className="flex flex-col w-full items-center">
+              <div className="flex flex-wrap gap-2 mb-3 h-12 w-full items-center justify-center">
+                {props.artist.genres.slice(0, 4).map((genre, index) => (
+                  <span
+                    key={`tag-${props.artist.id}-${index}`}
+                    className="bg-rose-100 text-rose-800 text-xs font-semibold px-2.5 py-0.5 rounded"
+                  >
+                    {genre}
+                  </span>
+                ))}
+              </div>
+              <p className="text-sm text-gray-600 group-hover:text-gray-200">Clique para contratar</p>
             </div>
-            <p className="text-sm text-gray-600">Clique para contratar</p>
           </div>
         </div>
       </div>

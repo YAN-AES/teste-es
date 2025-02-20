@@ -17,7 +17,7 @@ export async function Playlist(props: Props) {
   const playlist1 = await getPlaylist({ playlistId: props.playlistId });
 
   return (
-    <div className="w-full max-w-7xl px-4">
+    <div className="flex flex-col w-full max-w-7xl px-4 gap-1">
       <h2 className="text-2xl font-bold pb-4">{props.title}</h2>
       <div className="flex flex-row w-full gap-6 justify-between">
         {
