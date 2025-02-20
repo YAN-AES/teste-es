@@ -10,8 +10,8 @@ export default async function AssignArtistPage(props: Props) {
   const { artistId } = await props.params;
 
   return (
-    <div>
-      <h1>Contratar Artista</h1>
+    <div className="flex flex-col items-center font-roboto gap-5">
+      <h1 className="font-bold text-2xl">Contratar Artista</h1>
       <AssignForm artistId={artistId} />
     </div>
   );

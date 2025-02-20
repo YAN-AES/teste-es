@@ -149,12 +149,12 @@ export function AssignForm(props: AssignFormProps) {
               </FormItem>
             )}
           />
-          <div className="grid grid-cols-2 gap-2">
+          <div className="flex gap-4 items-center justify-between">
             <FormField
               control={form.control}
               name="dataEvento"
               render={({ field }) => (
-                <FormItem className="flex flex-col col-span-1">
+                <FormItem className="flex-1 flex-col">
                   <FormLabel className="font-roboto font-semibold">
                     Data do Evento
                   </FormLabel>
@@ -196,7 +196,7 @@ export function AssignForm(props: AssignFormProps) {
               control={form.control}
               name="cache"
               render={({ field }) => (
-                <FormItem className="col-span-1">
+                <FormItem className="flex-1">
                   <FormLabel className="font-roboto font-semibold">
                     Cachê
                   </FormLabel>
