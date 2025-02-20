@@ -39,7 +39,7 @@ export async function SearchResults(props: Props) {
     <>
       {searchedArtists?.items?.length > 0 && (
         <div className="w-full max-w-7xl px-4">
-          <h2 className="text-2xl font-bold pb-4">Artistas pesquisados</h2>
+          <h2 className="text-2xl font-bold py-4">Artistas pesquisados</h2>
           <div className="flex flex-row w-full gap-2 py-2">
             <Carousel className="w-full" opts={{ loop: true }}>
               <CarouselContent className="w-full">
