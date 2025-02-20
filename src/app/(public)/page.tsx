@@ -57,9 +57,11 @@ export default async function Home(props: Props) {
           />
         </React.Suspense>
 
-        <Link href="/artistas-agendados">
-          <Button variant="rosebutton">Artistas Agendados</Button>
-        </Link>
+        <div className="pt-7">
+          <Link href="/artistas-agendados">
+            <Button variant="rosebutton">Artistas Agendados</Button>
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ export default function ArtistCard(props: ArtistCardProps) {
 
   return (
     <Link href={href} className="group">
-      <div className="flex flex-col justify-start items-center font-roboto border w-56 h-[370px] rounded-lg overflow-hidden hover:shadow-lg group-hover:bg-rose-300 transition-all ease-in-out duration-200">
+      <div className="flex flex-col justify-start items-center font-roboto border pt-2 w-60 h-[378px] rounded-lg overflow-hidden hover:shadow-xl group-hover:bg-rose-300 transition-all ease-in-out duration-200">
         <div className="relative size-56 rounded-lg overflow-hidden">
           <Image
             src={props.artist.images?.[0]?.url || "/placeholder.svg"}
