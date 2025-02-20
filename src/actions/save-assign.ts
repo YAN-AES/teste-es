@@ -17,6 +17,7 @@ export async function SaveAssign(args: Assign) {
       number: args.numero,
       state: args.estado,
       street: args.rua,
+      cache: args.cache,
     }
   });
 

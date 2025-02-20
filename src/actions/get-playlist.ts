@@ -10,7 +10,7 @@ type GetPlaylistArgs = {
   limit?: MaxInt<50>;
 };
 
-export async function getPlaylist({ playlistId, limit = 10 }: GetPlaylistArgs) {
+export async function getPlaylist({ playlistId, limit = 5 }: GetPlaylistArgs) {
   const playlist = await spotifySdk.playlists.getPlaylistItems(playlistId, "BR", undefined, limit);
 
   const artistsIds = playlist.items
@@ -24,8 +24,16 @@ export async function getPlaylist({ playlistId, limit = 10 }: GetPlaylistArgs) {
     artists.push(artist);
   }
 
+  // await fakeDelay(5000);
+
   return {
     playlist,
     artists,
   };
 }
+
+// async function fakeDelay(ms: number) {
+//   return new Promise((resolve) => {
+//     setTimeout(resolve, ms);
+//   });
+// }

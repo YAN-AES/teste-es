@@ -25,6 +25,7 @@ model Assign {
   neighborhood String
   city         String
   state        String
+  cache        Float
 
   createdAt DateTime @default(now())
 }

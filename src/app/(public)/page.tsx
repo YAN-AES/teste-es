@@ -4,56 +4,45 @@ import React from "react";
 import Link from "next/link";
 
 // Components imports
-import ArtistCard from "@/components/artist-card";
 import { QuerySearchInput } from "@/components/search-component";
-
-// Actions imports
-import { getPlaylist } from "@/actions/get-playlist";
-import { searchArtists } from "@/actions/search-artists";
+import { Playlist, PlaylistSkeleton } from "@/components/playlist";
+import { SearchResults, SearchResultsSkeleton } from "./_components/search-results";
 
 type Props = {
   searchParams: Promise<{
     search: string;
+    offset: string;
   }>;
 };
 
 export default async function Home(props: Props) {
   const { searchParams } = props;
-  const { search } = await searchParams;
-
-  const searchedArtists = await searchArtists({ search, limit: 3 });
-  const playlist1 = await getPlaylist({ playlistId: "4gJGkR1ISXTIF42k9hKwbD" });
+  const { search, offset } = await searchParams;
 
   return (
     <div className="font-roboto flex flex-col items-center justify-center min-h-screen">
 
       <QuerySearchInput searchable="artistas" />
 
-      <div className="w-full max-w-7xl px-4">
-        <h2 className="text-2xl font-bold pb-4">Artistas pesquisados</h2>
-        <div className="flex flex-row w-full gap-2">
-          {
-            searchedArtists.items?.map((artist) => (
-              <ArtistCard key={artist.id} artist={artist} />
-            ))
-          }
-        </div>
-      </div>
+      <React.Suspense fallback={<SearchResultsSkeleton />}>
+        <SearchResults search={search} offset={offset} />
+      </React.Suspense>
 
       <h1 className="text-3xl font-bold font-roboto pb-6 pt-16">
         Contratação de Artistas
       </h1>
 
-      <div className="w-full max-w-7xl px-4">
-        <h2 className="text-2xl font-bold pb-4">Artistas em Destaque</h2>
-        <div className="grid grid-cols-1 pd:grid-cols-5 gap-6 pb-8">
-          {
-            playlist1.artists.map((artist) => (
-              <ArtistCard key={artist.id} artist={artist} />
-            ))
-          }
-        </div>
-      </div>
+      <React.Suspense fallback={<PlaylistSkeleton />}>
+        <Playlist playlistId="4gJGkR1ISXTIF42k9hKwbD" title="Artistas em Destaque" />
+      </React.Suspense>
+
+      <React.Suspense fallback={<PlaylistSkeleton />}>
+        <Playlist playlistId="2NIREBwQKsAJ6RUCfV7ghs" title="Artistas em Destaque" />
+      </React.Suspense>
+
+      <React.Suspense fallback={<PlaylistSkeleton />}>
+        <Playlist playlistId="6k2NJwStYkPCUKkGErQfNH" title="Artistas em Destaque" />
+      </React.Suspense>
 
       <div className="mt-8 flex items-center justify-center">
         <Link

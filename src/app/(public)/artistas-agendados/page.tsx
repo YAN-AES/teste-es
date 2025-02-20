@@ -18,12 +18,16 @@ export default async function ArtistasAgendados() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {
           artists.map((artist) => (
-            <ArtistCard key={artist.id} artist={artist} />
+            <ArtistCard
+              key={artist.id}
+              artist={artist}
+              href={`/contrato/${artist.contractId}`}
+            />
           ))
         }
       </div>
       <Link href="/">
-        <Button variant="rosebutton">Voltar para Início</Button>
+        <Button type="button" variant="rosebutton">Voltar para Início</Button>
       </Link>
     </div>
   );

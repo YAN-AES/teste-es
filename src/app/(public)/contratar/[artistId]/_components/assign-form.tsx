@@ -57,6 +57,7 @@ export function AssignForm(props: AssignFormProps) {
       bairro: "",
       cidade: "",
       estado: "",
+      cache: 0,
     },
   });
 
@@ -148,47 +149,69 @@ export function AssignForm(props: AssignFormProps) {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="dataEvento"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel className="font-roboto font-semibold">
-                  Data do Evento
-                </FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP", { locale: ptBR })
-                        ) : (
-                          <span>Selecione uma data</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) => date < new Date()}
-                      initialFocus
+          <div className="grid grid-cols-2 gap-2">
+            <FormField
+              control={form.control}
+              name="dataEvento"
+              render={({ field }) => (
+                <FormItem className="flex flex-col col-span-1">
+                  <FormLabel className="font-roboto font-semibold">
+                    Data do Evento
+                  </FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP", { locale: ptBR })
+                          ) : (
+                            <span>Selecione uma data</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) => date < new Date()}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="cache"
+              render={({ field }) => (
+                <FormItem className="col-span-1">
+                  <FormLabel className="font-roboto font-semibold">
+                    Cachê
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="R$ 0,00"
+                      {...field}
                     />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <div className="flex gap-4">
             <FormField

@@ -29,7 +29,7 @@ export function SearchInput(props: InputProps) {
   const searchParams = useSearchParams();
 
   const [search, setSearch] = useState(searchParams.get("search") || "");
-  const debouncedSearch = useDebounce(search, 500);
+  const debouncedSearch = useDebounce(search, 300);
 
   const createQueryString = useCallback(
     (name: string, value: string) => {

@@ -27,6 +27,13 @@ export const assignSchema = z.object({
   estado: z.string().length(2, {
     message: "Use a sigla do estado com 2 caracteres.",
   }),
+  cache: z.coerce
+    .number({
+      required_error: "O cachê é obrigatório.",
+    })
+    .min(1, {
+      message: "O cachê deve ser maior que 0.",
+    }),
 });
 
 export type Assign = z.infer<typeof assignSchema>;
