@@ -1,6 +1,7 @@
 "use server";
 // Libraries Imports
 import type { Artist } from "@spotify/web-api-ts-sdk";
+import { cookies } from "next/headers";
 
 // Local Imports
 import { spotifySdk } from "@/lib/spotify-client";
@@ -11,6 +12,7 @@ interface HiredArtist extends Artist {
 }
 
 export async function getHiredArtists() {
+  await cookies();
   const artistsIds = await prisma.assign.findMany({
     select: {
       id: true,
