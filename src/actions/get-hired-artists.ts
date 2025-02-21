@@ -16,6 +16,7 @@ export async function getHiredArtists() {
       id: true,
       artistId: true,
     },
+    take: 100,
   });
 
   const artists: HiredArtist[] = [];

@@ -19,10 +19,12 @@ export async function Playlist(props: Props) {
   return (
     <div className="flex flex-col w-full px-4 gap-1">
       <h2 className="text-2xl font-bold pb-4">{props.title}</h2>
-      <div className="flex flex-row w-full gap-6 justify-between">
+      <div className="grid w-full gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {
-          playlist1.artists.map((artist) => (
-            <ArtistCard key={artist.id} artist={artist} />
+          playlist1.artists.map((artist, index) => (
+            <div key={`${artist.id}-${index}`} className="col-span-1 w-full">
+              <ArtistCard artist={artist} width />
+            </div>
           ))
         }
       </div>

@@ -2,12 +2,25 @@
 import type { Artist } from "@spotify/web-api-ts-sdk";
 import Image from "next/image";
 import Link from "next/link";
+import {cva, type VariantProps} from "class-variance-authority";
 
 // Components imports
 import { Skeleton } from "@/components/ui/skeleton";
 
-interface ArtistCardProps {
-  artist: Artist;
+const artistCardVariants = cva(
+  "flex flex-col justify-start items-center font-roboto border h-[378px] rounded-lg overflow-hidden hover:shadow-xl group-hover:bg-rose-400 transition-all ease-in-out duration-200",
+  {
+    variants: {
+      "width": {
+        true: "w-full",
+        false: "w-60"
+      }
+    },
+  }
+)
+
+interface ArtistCardProps extends VariantProps<typeof artistCardVariants> {
+  artist: Partial<Artist>;
   href?: string;
 }
 
@@ -16,14 +29,14 @@ export default function ArtistCard(props: ArtistCardProps) {
 
   return (
     <Link href={href} className="group">
-      <div className="flex flex-col justify-start items-center font-roboto border pt-2 w-60 h-[378px] rounded-lg overflow-hidden hover:shadow-xl group-hover:bg-rose-400 transition-all ease-in-out duration-200">
-        <div className="relative size-56 rounded-lg overflow-hidden">
+      <div className={artistCardVariants({ width: props.width })}>
+        <div className="relative w-full h-56 overflow-hidden p-2">
           <Image
             src={props.artist.images?.[0]?.url || "/placeholder.svg"}
-            alt={props.artist.name}
+            alt={props.artist.name || "artist's profile image"}
             width={256}
             height={256}
-            className="size-full object-fill"
+            className="size-full object-cover rounded-lg"
             priority
           />
         </div>
@@ -32,7 +45,7 @@ export default function ArtistCard(props: ArtistCardProps) {
           <div className="flex flex-wrap items-center justify-center gap-2 mb-3">
             <div className="flex flex-col w-full items-center">
               <div className="flex flex-wrap gap-2 mb-3 h-12 w-full items-center justify-center">
-                {props.artist.genres.slice(0, 4).map((genre, index) => (
+                {props.artist.genres?.slice(0, 4).map((genre, index) => (
                   <span
                     key={`tag-${props.artist.id}-${index}`}
                     className="bg-rose-100 text-rose-800 text-xs font-semibold px-2.5 py-0.5 rounded"

@@ -17,11 +17,12 @@ export default async function ArtistasAgendados() {
       <h1 className="text-3xl font-bold mb-6">Artistas Agendados</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6">
         {
-          artists.map((artist) => (
+          artists.map((artist, index) => (
             <ArtistCard
-              key={artist.id}
+              key={`${artist.id}-${index}`}
               artist={artist}
               href={`/contrato/${artist.contractId}`}
+              width={false}
             />
           ))
         }

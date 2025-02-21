@@ -49,7 +49,7 @@ export async function SearchResults(props: Props) {
                     className="basis-1/1"
                   >
                     <div className="py-4 pb-7">
-                      <ArtistCard artist={artist} />
+                      <ArtistCard artist={artist} width={false} />
                     </div>
                   </CarouselItem>
                 ))}
