@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# [EventLog](https://nextjs.org/)
 
-## Getting Started
+## Sobre o Projeto
+EventLog foi desenvolvido como teste para a vaga de estágio da empresa EnterScience. Foi feito para facilitar a busca e contratação de artistas. Com uma interface intuitiva e responsiva, o sistema permite que os usuários realizem buscas, preencham formulários validados e acompanhem artistas agendados.
 
-First, run the development server:
+## Tecnologias Utilizadas
+- **[Next.js](https://nextjs.org/)**
+- **[TypeScript](https://www.typescriptlang.org/)**
+- **[Tailwind CSS](https://tailwindcss.com/)**
+- **[Prisma](https://www.prisma.io/)**
+- **[Shadcn UI](https://ui.shadcn.com/)**
+- **[Spotify SDK](https://developer.spotify.com/documentation/web-sdk)**
+- **[Zod](https://zod.dev/)**
+- **[SQLite](https://www.sqlite.org/)**
+- **[ViaCEP](https://viacep.com.br/)**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Como Executar o Projeto
+
+### Configuração do Ambiente
+Antes de iniciar, certifique-se de ter o Node.js ou Bun instalado. Configure o arquivo `.env` seguindo o formato do `.env.example`. As chaves da API estão presentes no [Dashboard do Spotify for Developers](https://developer.spotify.com/dashboard), onde se deve criar uma aplicação e utilizar o Client ID e o Client Secret.
+
+### Instalação de Dependências
+Para instalar as dependências, execute:
+
+#### Com Node.js:
+```sh
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Com Bun:
+```sh
+bun install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Configuração do Banco de Dados
+Para preparar o banco de dados, execute:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### Com Node.js:
+```sh
+npx prisma db push
+```
 
-## Learn More
+#### Com Bun:
+```sh
+bunx prisma db push
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Execução do Projeto
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Build
+Para compilar e iniciar o projeto execute os seguintes comandos:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### Com Node.js:
+```sh
+npm run build
+npm run start
+```
 
-## Deploy on Vercel
+#### Com Bun:
+```sh
+bun run build
+bun run start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+A aplicação estará disponível em `http://localhost:3000/`.
+
+## Requisitos
+- Página com **barra de pesquisa** para buscar artistas.
+- **Resultados paginados** para facilitar a navegação.
+- **Formulários de contratação validados**, com suporte ao **ViaCEP** para preenchimento automático de endereço.
+- **Página de artistas agendados**, com redirecionamento para detalhes do contrato.
+- **Layout responsivo**
+
+
+
